@@ -1,0 +1,19 @@
+{
+  "name": "nosorrow/php-image-manipulator",
+  "description": "Simple image manipulations",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "plamen petkov",
+      "email": "plamenorama@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "":"src",
+      "Executions\\": "src/Executions"
+    }
+  }
+}
