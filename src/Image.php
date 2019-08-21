@@ -1,24 +1,24 @@
 <?php
 /*
- * Simple Image resize
+ * Simple Images resize
  *
  * Usage:
  *
- * $image = new Image();
- * $image->get('image.jpg')->resize(300,200)->withPreffix('resize_')->save();
+ * $image = new Images();
+ * $image->get('image.jpg')->resize(300,200)->withPreffix('resize_');
+ * $image->pixelate(12)->save();
  * or
  * $image->save('dir/sub-dir/new.jpg);
  * or
  * $image->get('image.jpg')->resize(300,200)->move('images/');
  *
  */
-//include "File.php";
 
 /**
- * Class Image
+ * Class Images
  *
- * @method \Executions pixelate(string $name = 'default')
- * @method \Executions resize(string $width = null, string $height = null)
+ * @method \Executions pixelate(int $size = 5)
+ * @method \Executions resize(int $width = null, int $height = null)
  *
  */
 
@@ -55,7 +55,7 @@ class Image extends File
      * @param $name
      * @param $arguments
      * @return $this
-     * @throws Exception
+     * @throws \ReflectionException
      */
     public function __call($name, $arguments = null)
     {
@@ -64,11 +64,11 @@ class Image extends File
         }
         $class_name = $this->getClass($name);
 
-        $class = new ReflectionClass($class_name);
+        $class = new \ReflectionClass($class_name);
 
         $instance  = $class->newInstance($arguments);
 
-        $reflectionMethod = new ReflectionMethod($class_name, 'execute');
+        $reflectionMethod = new \ReflectionMethod($class_name, 'execute');
         $this->dst_image  = ($reflectionMethod->invoke($instance, $this));
 
         return $this;
@@ -77,7 +77,7 @@ class Image extends File
     /**
      * @param $class
      * @return string
-     * @throws Exception
+     * @throws \Exception
      */
     public function getClass($class)
     {
@@ -125,10 +125,11 @@ class Image extends File
         if ($this->image_preffix_name) {
 
             $path = dirname($path) . '/' . $this->image_preffix_name . basename($path);
-            $path = trim($path, '.' . '/');
+            //   $path = trim($path, '.' . '/');
         }
+        //   dump(($path));die;
 
-        if (!file_put_contents($path, $this->buffering())) {
+        if (file_put_contents($path, $this->buffering()) === false) {
             throw new ImageException('Nothing to save !');
         }
 
@@ -146,6 +147,11 @@ class Image extends File
         return true;
     }
 
+    /**
+     * @param $dir
+     * @return bool
+     * @throws \Core\Libs\Exceptions\ImageException
+     */
     public function move($dir)
     {
         // ако $dir не завършва с '/'
@@ -159,12 +165,9 @@ class Image extends File
 
         $this->save($path);
 
-        $this->setImageInfo($path);
-
         return true;
 
     }
-
 
     /**
      * @param $path
@@ -182,12 +185,22 @@ class Image extends File
         $this->manipulated_image_info = $image_info;
     }
 
-    public function imageinfo($name)
-    {
-        if(!$this->manipulated_image_info[$name]){
-            throw new ImageException('No valid response found');
+    /**
+     * @param $name
+     * @return mixed
+     * @throws ImageException
+     */
+    public function imageinfo($name = null)
+    {var_dump($this->manipulated_image_info);
+        if ($name === null){
+            return $this->manipulated_image_info;
+        } else {
+            if(!$this->manipulated_image_info[$name]){
+                throw new ImageException('No valid response found');
+            }
+            return $this->manipulated_image_info[$name];
         }
-        return $this->manipulated_image_info[$name];
+
     }
     /*
      * -----------------------------------------------------
