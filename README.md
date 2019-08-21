@@ -9,7 +9,7 @@ Supported file types:
 2. gif
 3. png
 
-####Usage:
+#### Usage:
 Basic:
 ```php
 $image = new Image();
