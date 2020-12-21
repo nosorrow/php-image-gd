@@ -85,9 +85,9 @@ class Image extends File
 
         if (class_exists($classname)){
             return $classname;
-        } else {
-            throw new \Exception('Commands: ' . $classname . ' is not available');
         }
+
+        throw new \Exception('Commands: ' . $classname . ' is not available');
     }
 
     /**
@@ -114,12 +114,14 @@ class Image extends File
      */
     public function save($path = null)
     {
-        if ($path == null) {
+        if ($path === null) {
             $path = $this->save_image_path;
         }
         if (!realpath(dirname($path))) {
             $dir = dirname($path);
-            mkdir($dir, 0777, true);
+            if (!mkdir($dir, 0777, true) && !is_dir($dir)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
+            }
         }
 
         if ($this->image_preffix_name) {
@@ -158,8 +160,8 @@ class Image extends File
         if(strrpos($dir, '/') !== strlen($dir)-1){
             $dir .= '/';
         }
-        if (!realpath($dir)) {
-            mkdir($dir, 0777, true);
+        if (!realpath($dir) && !mkdir($dir, 0777, true) && !is_dir($dir)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
         }
         $path = $dir . pathinfo($this->save_image_path)['basename'];
 
@@ -191,15 +193,15 @@ class Image extends File
      * @throws ImageException
      */
     public function imageinfo($name = null)
-    {var_dump($this->manipulated_image_info);
+    {
         if ($name === null){
             return $this->manipulated_image_info;
-        } else {
-            if(!$this->manipulated_image_info[$name]){
-                throw new ImageException('No valid response found');
-            }
-            return $this->manipulated_image_info[$name];
         }
+
+        if(!$this->manipulated_image_info[$name]){
+            throw new ImageException('No valid response found');
+        }
+        return $this->manipulated_image_info[$name];
 
     }
     /*
