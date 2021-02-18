@@ -86,7 +86,7 @@ class Image extends File
     public function getClass($class)
     {
         $classname = sprintf(
-            'Core\Libs\Images\Executions\\%s',
+            'Executions\\%s',
             ucfirst($class)
         );
 

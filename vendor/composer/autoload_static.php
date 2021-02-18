@@ -10,6 +10,7 @@ class ComposerStaticInit259a6ac559dce11222372e69760b3311
         'E' => 
         array (
             'Executions\\' => 11,
+            'Exceptions\\' => 11,
         ),
     );
 
@@ -18,10 +19,18 @@ class ComposerStaticInit259a6ac559dce11222372e69760b3311
         array (
             0 => __DIR__ . '/../..' . '/src/Executions',
         ),
+        'Exceptions\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/Exceptions',
+        ),
     );
 
     public static $fallbackDirsPsr4 = array (
         0 => __DIR__ . '/../..' . '/src',
+    );
+
+    public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
@@ -30,6 +39,7 @@ class ComposerStaticInit259a6ac559dce11222372e69760b3311
             $loader->prefixLengthsPsr4 = ComposerStaticInit259a6ac559dce11222372e69760b3311::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit259a6ac559dce11222372e69760b3311::$prefixDirsPsr4;
             $loader->fallbackDirsPsr4 = ComposerStaticInit259a6ac559dce11222372e69760b3311::$fallbackDirsPsr4;
+            $loader->classMap = ComposerStaticInit259a6ac559dce11222372e69760b3311::$classMap;
 
         }, null, ClassLoader::class);
     }

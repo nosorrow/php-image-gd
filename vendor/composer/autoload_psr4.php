@@ -7,5 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Executions\\' => array($baseDir . '/src/Executions'),
+    'Exceptions\\' => array($baseDir . '/src/Exceptions'),
     '' => array($baseDir . '/src'),
 );

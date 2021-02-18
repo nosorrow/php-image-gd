@@ -4,7 +4,11 @@ require 'vendor/autoload.php';
 
 $img = new Image();
 
-$img->get('coronabg6.jpg')
-    ->resize(300,300)
-    ->withPreffix(time() . "_")
-    ->save();
+try {
+    $img->get('coronabg.jpg')
+        ->resize(300, 300)
+        ->withPreffix(time() . "_")
+        ->save();
+} catch (\Exceptions\ImageException $e) {
+    echo $e->getMessage() . " in file:" . " " . $e->getFile() . " line: " . $e->getLine();
+}

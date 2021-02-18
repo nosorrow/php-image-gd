@@ -13,7 +13,8 @@
   "autoload": {
     "psr-4": {
       "":"src",
-      "Executions\\": "src/Executions"
+      "Executions\\": "src/Executions",
+      "Exceptions\\": "src/Exceptions"
     }
   }
 }
