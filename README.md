@@ -21,10 +21,10 @@ $image->get('image.jpg')->resize(300,200)->save();
 $image = new Image();
 $image->get('image.jpg')->resize(300,200)->withPreffix('resize_')->save();
 ```
-Save with new name:
+Save with new file name:
 ```php
 $image = new Image();
-$image->get('image.jpg')->resize(300,200)->save(dir/new_image.jpg);
+$image->get('image.jpg')->resize(300,200)->save('dir/new_image.jpg');
 
 ```
 Resize & move resized file in new directory:
