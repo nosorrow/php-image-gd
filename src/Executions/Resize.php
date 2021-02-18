@@ -2,29 +2,41 @@
 
 namespace Executions;
 
+use Exceptions\ImageException;
+
 class Resize extends AbstractExecutions
 {
-
+    /**
+     * @param Image $image
+     * @return resource
+     * @throws ImageException
+     */
     public function execute(\Image $image)
     {
-        if (count($this->arguments) > 2) {
-            throw new \Exception("Too many arguments");
+        [$width_orig, $height_orig] = $image->src_image_info;
 
-        } elseif (count($this->arguments) == 2) {
-            list($width, $height) = $this->arguments;
+        $count_args = count($this->arguments);
 
-        } elseif (count($this->arguments) == 1){
-            $width = $this->arguments[0];
-            $height = null;
-
-        } else {
-            throw new \Exception("No arguments !");
-
+        if ($count_args > 2) {
+            throw new ImageException("Too many arguments");
         }
 
-        list($width_orig, $height_orig) = $image->src_image_info;
+        if ($count_args === 0) {
+            throw new ImageException("No arguments !");
+        }
 
-        return $this->resize($image->src_image, $width, $height, $width_orig, $height_orig);
+        if ($count_args === 2) {
+            [$width, $height] = $this->arguments;
+
+        }
+        // if one argument - calculate %
+        if ($count_args === 1) {
+            $percent = ($this->arguments[0]>0)?$this->arguments[0]/100:$this->arguments[0];
+            $width = $width_orig * $percent;
+            $height = $height_orig * $percent;
+        }
+
+        return $this->resize($image->src_image, $width_orig, $height_orig, $width, $height);
     }
 
     /**
@@ -35,24 +47,25 @@ class Resize extends AbstractExecutions
      * @param $height_orig
      * @return resource
      */
-    protected function resize($image, $width = null, $height = null, $width_orig, $height_orig)
+    protected function resize($image, $width_orig, $height_orig, $width = null, $height = null)
     {
         $ratio_orig = $width_orig / $height_orig;
 
-        if ($height == null) {
+        if ($height === null) {
             $height = $width / $ratio_orig;
 
-        } elseif ($width == null) {
+        } elseif ($width === null) {
             $width = $height * $ratio_orig;
         }
 
         $dst_image = imagecreatetruecolor($width, $height);
-        if (get_resource_type($image) == 'gd'){
+        if (get_resource_type($image) === 'gd') {
             imagecopyresampled($dst_image, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
 
         }
 
         return $dst_image;
+
     }
 
 }

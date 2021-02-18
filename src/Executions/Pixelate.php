@@ -2,16 +2,22 @@
 
 namespace Executions;
 
+use Exceptions\ImageException;
 
 class Pixelate extends AbstractExecutions
 {
 
+    /**
+     * @param \Image $image
+     * @return mixed
+     * @throws ImageException
+     */
     public function execute(\Image $image)
     {
         $count = count($this->arguments);
-        var_dump('Count: ',$count);
+
         if ($count > 1 || $count == 0) {
-            throw new \Exception("Too many or Not arguments in " . get_class());
+            throw new ImageException("Too many or Not arguments in " . get_class());
         }
         $size = $this->arguments[0];
 

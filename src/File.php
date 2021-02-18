@@ -4,9 +4,11 @@
  * Class File
  * Getting file and return GD library resource
  */
+
+use Exceptions\ImageException;
+
 class File
 {
-
     /**
      * Source image link resource.
      * @var
@@ -33,19 +35,19 @@ class File
     public function __construct()
     {
         if (!extension_loaded('gd') && !function_exists('gd_info')) {
-            throw new Exception("GD Library extension not available with this PHP installation.");
+            throw new ImageException("GD Library extension not available with this PHP installation.");
         }
     }
 
     /**
      * @param $file
      * @return $this
-     * @throws \Exception
+     * @throws ImageException
      */
     public function get($file)
     {
         if (!file_exists($file)) {
-            throw new \Exception(sprintf("File %s not found!", $file));
+            throw new ImageException(sprintf("File %s not found!", $file));
         }
         $img_info = getimagesize($file);
 
@@ -63,7 +65,7 @@ class File
                 break;
 
             default:
-                throw new \Exception(
+                throw new ImageException(
                     "Only JPG, PNG & GIF file types are supported!"
                 );
         }
