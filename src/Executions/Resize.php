@@ -59,11 +59,13 @@ class Resize extends AbstractExecutions
         }
 
         $dst_image = imagecreatetruecolor($width, $height);
-        if (get_resource_type($image) === 'gd') {
-            imagecopyresampled($dst_image, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
 
-        }
+        // if (get_resource_type($image) === 'gd') {
+		/* PHP 8 correct way to check */
+		if(gettype($image) == "object" && get_class($image) == "GdImage"){
+			imagecopyresampled($dst_image, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
 
+		}
         return $dst_image;
 
     }
