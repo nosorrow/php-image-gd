@@ -35,7 +35,7 @@ $image->get('image.jpg')->resize(300,200)->move('images/');
 $image->get('image.jpg')->resize(300,200)->withPreffix('resize_')->move('images/');
 ```
 
-Get image info after resize:
+Get image information after resizing:
 ```php
 $image = new Image();
 $image->get('image.jpg')->resize(300,200)->save();
